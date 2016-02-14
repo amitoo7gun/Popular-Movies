@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+
+    <string name="app_name">Popular Movies</string>
+    <string name="content_authority">com.example.amit.popularmovies</string>
+    <string name="sync_account_type">popularmovies.example.com</string>
+    <string name="action_share">Share</string>
+    <array name="sort_menu">
+        <item>By Price</item>
+        <item>By Rating</item>
+    </array>
+    <!-- Menu label to fetch updated weather info from the server -->
+    <string name="title_activity_detail">Movie Details</string>
+
+    <!-- Key name for storing error status in SharedPreferences -->
+    <string name="pref_error_status_key" translatable="false">error-status</string>
+
+
+    <!-- Empty Movie Database -->
+    <string name="empty_forecast_list">No Movies Information Available</string>
+    <string name="empty_movie_list_no_network">No Movie information available. The network is not available to fetch weather data.</string>
+    <string name="empty_movie_list_server_down">No Movie information available. The server is not returning data.</string>
+    <string name="empty_movie_list_server_error">No Movie information available. The server is not returning valid data. Please check for an updated version of Sunshine.</string>
+
+    <string name="app_main_logo_text">Popular Movies</string>
+
+    <!--Strings for detail view -->
+    <string name="rating_outoff_text" translatable="false">/10</string>
+    <string name="releasing_on_text" translatable="true">Releasing on</string>
+
+</resources>
