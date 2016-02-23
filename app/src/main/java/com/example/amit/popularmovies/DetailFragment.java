@@ -34,6 +34,9 @@ public class DetailFragment extends android.support.v4.app.Fragment implements L
     private int favCheck;
 
 
+    public static String currentMovieId;
+
+
     private static final int DETAIL_LOADER = 0;
 
     private static final String[] DETAIL_COLUMNS = {
@@ -44,9 +47,8 @@ public class DetailFragment extends android.support.v4.app.Fragment implements L
             MoviesContract.MoviesEntry.COLUMN_MOVIE_USERRATING,
             MoviesContract.MoviesEntry.COLUMN_MOVIE_PLOT,
             MoviesContract.MoviesEntry.COLUMN_MOVIE_FAVOURITE
-
-
     };
+
     public static final int COL_MOVIES_TITLE = 0;
     public static final int COL_MOVIES_POSTERPATH = 1;
     public static final int COL_MOVIES_ID = 2;
@@ -63,7 +65,7 @@ public class DetailFragment extends android.support.v4.app.Fragment implements L
     private TextView mPlotView;
     private TextView mMovieIdView;
 
-//
+    //
 //    public static DetailFragment newInstance() {
 //        DetailFragment fragment = new DetailFragment();
 //        return fragment;
@@ -92,9 +94,10 @@ public class DetailFragment extends android.support.v4.app.Fragment implements L
         mFavouriteView = (ImageView) rootView.findViewById(R.id.movie_favourite);
         mMovieIdView = (TextView) rootView.findViewById(R.id.detail_movie_id_textview);
         mFavouriteView.setOnClickListener(this);
+
+
         return rootView;
     }
-
 
     private void finishCreatingMenu(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.action_share);
@@ -141,6 +144,7 @@ public class DetailFragment extends android.support.v4.app.Fragment implements L
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
 
+            currentMovieId = data.getString(COL_MOVIES_ID);
             String poster_base_url = "http://image.tmdb.org/t/p/w500";
             String posterPath =poster_base_url + data.getString(COL_MOVIES_POSTERPATH);
             Picasso.with(getContext()).load(posterPath).into(mPosterView);
@@ -157,29 +161,29 @@ public class DetailFragment extends android.support.v4.app.Fragment implements L
                 mFavouriteView.setImageResource(R.drawable.ic_favorite_white_24dp);
             // Code for sharing option
             mMoviesShare = String.format("Hey! Watch %s releasing on %s", data.getString(COL_MOVIES_TITLE), data.getString(COL_MOVIES_RELEASEDATE));
+        }
+
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        Toolbar toolbarView = (Toolbar) getView().findViewById(R.id.toolbar);
+
+        // We need to start the enter transition after the data has loaded
+        if (activity instanceof DetailActivity) {
+            activity.supportStartPostponedEnterTransition();
+
+            if ( null != toolbarView ) {
+                activity.setSupportActionBar(toolbarView);
+
+                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
-
-            AppCompatActivity activity = (AppCompatActivity)getActivity();
-            Toolbar toolbarView = (Toolbar) getView().findViewById(R.id.toolbar);
-
-            // We need to start the enter transition after the data has loaded
-            if (activity instanceof DetailActivity) {
-                activity.supportStartPostponedEnterTransition();
-
-                if ( null != toolbarView ) {
-                    activity.setSupportActionBar(toolbarView);
-
-                    activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
-                    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                }
-            } else {
-                if ( null != toolbarView ) {
-                    Menu menu = toolbarView.getMenu();
-                    if ( null != menu ) menu.clear();
-                    toolbarView.inflateMenu(R.menu.detailfragment);
-                    finishCreatingMenu(toolbarView.getMenu());
-                }
+        } else {
+            if ( null != toolbarView ) {
+                Menu menu = toolbarView.getMenu();
+                if ( null != menu ) menu.clear();
+                toolbarView.inflateMenu(R.menu.detailfragment);
+                finishCreatingMenu(toolbarView.getMenu());
             }
+        }
 
 
     }
@@ -188,28 +192,29 @@ public class DetailFragment extends android.support.v4.app.Fragment implements L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) { }
 
-        @Override
-        public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
 
-                if(v.getId() == mFavouriteView.getId())
-                {
-                    ContentValues updateValues = new ContentValues();
-                    String whereCl = MoviesContract.MoviesEntry.COLUMN_MOVIE_MOVID + "= \"" + mMovieIdView.getText() + "\"";
-                    if(favCheck == 0) {
+        if(v.getId() == mFavouriteView.getId())
+        {
+            ContentValues updateValues = new ContentValues();
+            String whereCl = MoviesContract.MoviesEntry.COLUMN_MOVIE_MOVID + "= \"" + mMovieIdView.getText() + "\"";
+            if(favCheck == 0) {
 
-                        updateValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_FAVOURITE, "1");
-                        getContext().getContentResolver().update(MoviesContract.MoviesEntry.CONTENT_URI, updateValues, whereCl, null);
-                        mFavouriteView.setBackgroundResource(R.drawable.ic_favorite_white_24dp);
-                        favCheck = 1;
-                    }
-                    else if(favCheck == 1)
-                    {
-                        updateValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_FAVOURITE, "0");
-                        getContext().getContentResolver().update(MoviesContract.MoviesEntry.CONTENT_URI, updateValues, whereCl, null);
-                        mFavouriteView.setBackgroundResource(R.drawable.ic_favorite_border_white_24dp);
-                        favCheck = 0;
-                    }
-                }
+                updateValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_FAVOURITE, "1");
+                getContext().getContentResolver().update(MoviesContract.MoviesEntry.CONTENT_URI, updateValues, whereCl, null);
+                mFavouriteView.setBackgroundResource(R.drawable.ic_favorite_white_24dp);
+                favCheck = 1;
             }
+            else if(favCheck == 1)
+            {
+                updateValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_FAVOURITE, "0");
+                getContext().getContentResolver().update(MoviesContract.MoviesEntry.CONTENT_URI, updateValues, whereCl, null);
+                mFavouriteView.setBackgroundResource(R.drawable.ic_favorite_border_white_24dp);
+                favCheck = 0;
+            }
+        }
+    }
+
 
 }
