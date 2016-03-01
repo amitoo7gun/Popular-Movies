@@ -13,11 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-<!--<LinearLayout-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical">-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <!--<android.support.v7.widget.Toolbar-->
         <!--android:id="@+id/toolbar"-->
@@ -29,7 +29,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/product_detail_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context="com.example.amit.popularmovies.DetailActivity"
-        tools:ignore="MergeRootFrame" />
-<!--</LinearLayout>-->
+        tools:ignore="MergeRootFrame" >
+
+</FrameLayout>
+
+
+</LinearLayout>

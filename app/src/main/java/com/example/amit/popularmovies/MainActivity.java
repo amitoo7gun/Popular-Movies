@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +17,9 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
-    private boolean mTwoPane;
+    public static boolean mTwoPane;
     private View mLayout;
+    public static String movieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
             getSupportActionBar().setElevation(0f);
         }
 
-        MoviesFragment hospitalsFragment =  ((MoviesFragment)getSupportFragmentManager()
+        MoviesFragment moviesFragment =  ((MoviesFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_movies));
 
         MoviesSyncAdapter.initializeSyncAdapter(this);
@@ -68,11 +70,11 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
     }
 
     @Override
-    public void onItemSelected(Uri contentUri) {
+    public void onItemSelected(Uri contentUri, String movie_id) {
         if (mTwoPane) {
             Bundle args = new Bundle();
             args.putParcelable(DetailFragment.DETAIL_URI, contentUri);
-
+            movieId = movie_id;
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
 
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
                     .commit();
 
         } else {
+            Log.d("movieid: ",movie_id);
+            movieId = movie_id;
             Intent intent = new Intent(this, DetailActivity.class)
                     .setData(contentUri);
             startActivity(intent);

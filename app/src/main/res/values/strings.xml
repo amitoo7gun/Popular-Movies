@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+<resources >
 
     <string name="app_name">Popular Movies</string>
+    <string name="api_key">a7028c1533e36a2a7e36ea6fd8e46bd6</string>
     <string name="content_authority">com.example.amit.popularmovies</string>
     <string name="sync_account_type">popularmovies.example.com</string>
     <string name="action_share">Share</string>
@@ -27,5 +28,13 @@
     <!--Strings for detail view -->
     <string name="rating_outoff_text" translatable="false">/10</string>
     <string name="releasing_on_text" translatable="true">Releasing on</string>
+    <string name="reviewby_text" translatable="true">By</string>
+    <string name="youtube_base_url" translatable="false">https://www.youtube.com/watch?v=</string>
+    <string name="trailer_heading" translatable="true">Trailers</string>
+    <string name="reviews_heading" translatable="true">Reviewss</string>
+    <string name="movie_poster_description" translatable="true">This is a movie poster</string>
+    <string name="movie_rating_description" translatable="true">This shows rating for movie</string>
+    <string name="movie_fav_description" translatable="true">Click on this to if this is your favourite movie</string>
+    <string name="movie_trailer_description" translatable="true">Click on this to watch trailer of movie</string>
 
 </resources>

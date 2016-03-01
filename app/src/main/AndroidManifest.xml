@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.amit.popularmovies">
 
@@ -16,24 +17,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-
         <activity
-            android:name="com.example.amit.popularmovies.MainActivity"
-            android:label="@string/app_name" >
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="com.example.amit.popularmovies.DetailActivity"
+            android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName="com.example.amit.popularmovies.MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.amit.popularmovies.MainActivity" />
@@ -46,20 +42,20 @@
         <activity
             android:name=".SearchActivity"
             android:label="@string/app_name"
-            android:parentActivityName="com.example.amit.popularmovies.SearchActivity" >
+            android:parentActivityName=".SearchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.amit.popularmovies.SearchActivity" />
         </activity>
 
         <provider
-            android:name="com.example.amit.popularmovies.data.MoviesProvider"
+            android:name=".data.MoviesProvider"
             android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
 
         <!-- SyncAdapter's dummy authentication service -->
-        <service android:name="com.example.amit.popularmovies.sync.MoviesAuthenticatorService" >
+        <service android:name=".sync.MoviesAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -71,8 +67,8 @@
 
         <!-- The SyncAdapter service -->
         <service
-            android:name="com.example.amit.popularmovies.sync.MovieSyncService"
-            android:exported="true" >
+            android:name=".sync.MovieSyncService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

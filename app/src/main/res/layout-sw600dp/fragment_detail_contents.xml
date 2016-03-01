@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_details_view"
+    tools:context="com.example.android.sunshine.app.DetailActivityFragment"> -->
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        style="@style/InLayoutPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/InLayoutPadding"
+            android:id="@+id/trailer_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trailer_heading"
+            android:textStyle="bold"
+            android:textSize="@dimen/info_textSize"
+            android:textColor="@color/primary_dark"
+            android:gravity="bottom"
+            android:layout_marginLeft="@dimen/margin_default"
+            android:layout_marginStart="@dimen/margin_default"/>
+
+        <LinearLayout
+            style="@style/InLayoutPadding"
+            android:id="@+id/trailer_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:visibility="visible"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/InLayoutPadding">
+
+            <TextView
+                android:id="@+id/review_head"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reviews_heading"
+                android:textStyle="bold"
+                android:textSize="@dimen/info_textSize"
+                android:textColor="@color/primary_dark"
+                android:gravity="bottom"
+                android:layout_marginLeft="@dimen/margin_default"
+                android:layout_marginStart="@dimen/margin_default"
+                />
+
+
+        </RelativeLayout>
+
+        <!--<include layout="@layout/review_list_layout" />-->
+        <LinearLayout
+            style="@style/InLayoutPadding"
+            android:id="@+id/review_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="0dp"
+            android:paddingBottom="@dimen/margin_default"
+            android:paddingEnd="@dimen/margin_large"
+            android:paddingStart="@dimen/margin_large"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
+
