@@ -40,8 +40,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
                         int adapterPosition = getAdapterPosition();
                         mCursor.moveToPosition(adapterPosition);
                         int idColumnIndex = mCursor.getColumnIndex(MoviesContract.MoviesEntry._ID);
+                        int movie_idColumnIndex = mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_MOVID);
 
-                        mClickHandler.onClick(mCursor.getInt(idColumnIndex), this);
+                        mClickHandler.onClick(mCursor.getInt(idColumnIndex),mCursor.getString(movie_idColumnIndex), this);
                         mICM.onClick(this);
                     }
 
@@ -49,7 +50,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
 
     public static interface MoviesAdapterOnClickHandler {
-        void onClick(int id, MoviesAdapterViewHolder vh);
+        void onClick(int id,String movie_id, MoviesAdapterViewHolder vh);
     }
 
     public MoviesAdapter(Context context, MoviesAdapterOnClickHandler dh, View emptyView, int choiceMode) {
@@ -85,7 +86,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         String posterPath =poster_base_url + mCursor.getString(MoviesFragment.COL_MOVIES_POSTERPATH);
         moviesAdapterViewHolder.nameView.setText(name);
 
-        Picasso.with(mContext).load(posterPath).into(moviesAdapterViewHolder.posterView);
+        Picasso.with(mContext)
+                .load(posterPath)
+                .placeholder(R.drawable.ic_terrain_black_48dp)
+                .error(R.drawable.ic_error_black_48dp)
+                .into(moviesAdapterViewHolder.posterView);
         mICM.onBindViewHolder(moviesAdapterViewHolder, position);
     }
 

@@ -75,7 +75,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter{
             final String QUERY_PARAM = "sort_by";
             final String API_KEY = "api_key";
             Uri.Builder uriBuilder = Uri.parse(BASE_URL).buildUpon();
-            uriBuilder.appendQueryParameter(API_KEY, "a7028c1533e36a2a7e36ea6fd8e46bd6")
+            uriBuilder.appendQueryParameter(API_KEY, getContext().getString(R.string.api_key))
                     .appendQueryParameter(QUERY_PARAM, "popularity.desc");
             Uri builtUri = uriBuilder.build();
             Log.d("Updated URL",builtUri.toString());
@@ -87,6 +87,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter{
            InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
+                Log.d(LOG_TAG,"No data received");
             }
           reader = new BufferedReader(new InputStreamReader(inputStream));
 

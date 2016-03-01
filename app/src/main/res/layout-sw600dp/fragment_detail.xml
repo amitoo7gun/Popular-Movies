@@ -1,10 +1,5 @@
   <!-- Master layout. -->
 
-  <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:id="@+id/main_content"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:fitsSystemWindows="true">
   <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
@@ -25,14 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/movie_poster"
-        android:scaleType="fitXY"
         android:contentDescription="@string/movie_poster_description"
+        android:scaleType="fitXY"
         />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_margin="@dimen/margin_default_detail"
             >
 
 
@@ -45,7 +40,6 @@
 
             <TextView
                 android:id="@+id/detail_movie_release_date_textview"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -64,18 +58,18 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/movie_rating_image"
                     android:scaleType="center"
+                    android:contentDescription="@string/movie_rating_description"
                     android:src="@drawable/ic_star_white_24dp"
                     android:background="@color/rating_backgroung"
                     android:padding="4dp"
-                    android:contentDescription="@string/movie_rating_description"
                     />
                 <TextView
                     android:id="@+id/detail_movie_rating_textview"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:textAppearance="?android:textAppearanceMedium"
-                    android:layout_toRightOf="@+id/movie_rating_image"
                     android:layout_toEndOf="@+id/movie_rating_image"
+                    android:layout_toRightOf="@+id/movie_rating_image"
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="2dp"
@@ -136,4 +130,3 @@
 
 </LinearLayout>
 </ScrollView>
-</android.support.design.widget.CoordinatorLayout>

@@ -17,6 +17,16 @@
 
 
 
-
+    <style name="InLayoutPadding">
+        <item name="android:paddingTop">@dimen/margin_default</item>
+        <item name="android:paddingRight">@dimen/margin_default</item>
+        <item name="android:paddingLeft">@dimen/margin_default</item>
+        <item name="android:paddingBottom">@dimen/margin_default</item>
+    </style>
+    <style name="TitleAppearance">
+        <item name="android:typeface">sans</item>
+        <item name="android:textSize">@dimen/title_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 
 </resources>

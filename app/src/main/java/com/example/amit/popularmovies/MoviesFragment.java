@@ -54,21 +54,24 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final int MOVIES_LOADER = 0;
 
-    private static final String[] HOSPITAL_COLUMNS = {
+    private static final String[] MOVIES_COLUMNS = {
 
             MoviesContract.MoviesEntry._ID,
             MoviesContract.MoviesEntry.COLUMN_MOVIE_TITLE,
-            MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTERPATH
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTERPATH,
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_MOVID
+
     };
 
     static final int COL_MOVIES_ID = 0;
     static final int COL_MOVIES_TITLE = 1;
     static final int COL_MOVIES_POSTERPATH = 2;
+    static final int COL_MOVIES_MOVIEID = 3;
 
 
     public interface Callback {
 
-        public void onItemSelected(Uri dateUri);
+        public void onItemSelected(Uri dateUri, String movie_id);
     }
 
     public MoviesFragment() {
@@ -98,7 +101,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_products);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), (MainActivity.mTwoPane)?3:2));
         View emptyView = rootView.findViewById(R.id.recyclerview_movies_empty);
         mSortbyPopular = (FloatingActionButton ) rootView.findViewById(R.id.sort_item_popular);
         mSortbyRating = (FloatingActionButton ) rootView.findViewById(R.id.sort_item_high_rating);
@@ -111,9 +114,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
         mMoviesAdapter = new MoviesAdapter(getActivity(), new MoviesAdapter.MoviesAdapterOnClickHandler(){
             @Override
-            public void onClick(int id, MoviesAdapter.MoviesAdapterViewHolder vh) {
+            public void onClick(int id,String movie_id, MoviesAdapter.MoviesAdapterViewHolder vh) {
                 ((Callback) getActivity())
-                        .onItemSelected(MoviesContract.MoviesEntry.buildMoviesDetail(id));
+                        .onItemSelected(MoviesContract.MoviesEntry.buildMoviesDetail(id),movie_id);
                 mPosition = vh.getAdapterPosition();
             }}, emptyView, mChoiceMode);
 
@@ -168,7 +171,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
         return new CursorLoader(getActivity(),
                 MoviesContract.MoviesEntry.CONTENT_URI,
-                HOSPITAL_COLUMNS,
+                MOVIES_COLUMNS,
                 whereClause,
                 null,
                 sortOrder);
