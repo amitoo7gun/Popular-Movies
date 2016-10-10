@@ -2,7 +2,7 @@
 <resources >
 
     <string name="app_name">Popular Movies</string>
-    <string name="api_key">a7028c1533e36a2a7e36ea6fd8e46bd6</string>
+    <string name="api_key">YOUR_TMDB_API_KEY</string>
     <string name="content_authority">com.example.amit.popularmovies</string>
     <string name="sync_account_type">popularmovies.example.com</string>
     <string name="action_share">Share</string>
