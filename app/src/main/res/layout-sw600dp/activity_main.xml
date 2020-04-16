@@ -26,7 +26,7 @@
         android:elevation="@dimen/appbar_elevation"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -43,7 +43,7 @@
             android:textColor="@color/white"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"/>
-        <android.support.v4.widget.Space
+        <androidx.core.widget.Space
             android:id="@+id/sunshineLogoAlign"
             android:layout_width="@dimen/list_icon"
             android:layout_height="0dp"
@@ -56,7 +56,7 @@
     </RelativeLayout>
 
     <!-- This is used as a strut to create two columns in our RelativeLayout -->
-    <android.support.v4.widget.Space
+    <androidx.core.widget.Space
         android:id="@+id/layout_center"
         android:layout_width="0dp"
         android:layout_height="0dp"

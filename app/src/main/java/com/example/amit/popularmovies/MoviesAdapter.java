@@ -1,22 +1,24 @@
 package com.example.amit.popularmovies;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.amit.popularmovies.data.MoviesContract;
+import com.example.amit.popularmovies.model.MovieDiscoverResult;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder>{
 
 
-    private Cursor mCursor;
+    private List<MovieDiscoverResult> movieResults;
     final private Context mContext;
     final private MoviesAdapterOnClickHandler mClickHandler;
     final private View mEmptyView;
@@ -29,8 +31,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
         public MoviesAdapterViewHolder(View view) {
             super(view);
-            nameView = (TextView) view.findViewById(R.id.list_item_name_textview);
-            posterView = (ImageView)view.findViewById(R.id.movie_poster);
+            nameView = view.findViewById(R.id.list_item_name_textview);
+            posterView = view.findViewById(R.id.movie_poster);
             view.setOnClickListener(this);
 
         }
@@ -38,11 +40,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
                 @Override
                 public void onClick(View v) {
                         int adapterPosition = getAdapterPosition();
-                        mCursor.moveToPosition(adapterPosition);
-                        int idColumnIndex = mCursor.getColumnIndex(MoviesContract.MoviesEntry._ID);
-                        int movie_idColumnIndex = mCursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_MOVID);
-
-                        mClickHandler.onClick(mCursor.getInt(idColumnIndex),mCursor.getString(movie_idColumnIndex), this);
+                        mClickHandler.onClick(movieResults.get(adapterPosition), this);
                         mICM.onClick(this);
                     }
 
@@ -50,10 +48,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
 
     public static interface MoviesAdapterOnClickHandler {
-        void onClick(int id,String movie_id, MoviesAdapterViewHolder vh);
+        void onClick(MovieDiscoverResult movieDiscoverResult, MoviesAdapterViewHolder vh);
     }
 
-    public MoviesAdapter(Context context, MoviesAdapterOnClickHandler dh, View emptyView, int choiceMode) {
+    MoviesAdapter(Context context, MoviesAdapterOnClickHandler dh, View emptyView, int choiceMode) {
         mContext = context;
         mClickHandler = dh;
         mEmptyView = emptyView;
@@ -78,12 +76,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
 
     @Override
     public void onBindViewHolder(MoviesAdapterViewHolder moviesAdapterViewHolder, int position) {
-        mCursor.moveToPosition(position);
+        MovieDiscoverResult item = movieResults.get(position);
 
 
-        String name = mCursor.getString(MoviesFragment.COL_MOVIES_TITLE);
+        String name = item.getTitle();
         String poster_base_url = "http://image.tmdb.org/t/p/w342";
-        String posterPath =poster_base_url + mCursor.getString(MoviesFragment.COL_MOVIES_POSTERPATH);
+        String posterPath =poster_base_url + item.getPosterPath();
         moviesAdapterViewHolder.nameView.setText(name);
 
         Picasso.with(mContext)
@@ -94,36 +92,33 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         mICM.onBindViewHolder(moviesAdapterViewHolder, position);
     }
 
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    void onRestoreInstanceState(Bundle savedInstanceState) {
         mICM.onRestoreInstanceState(savedInstanceState);
     }
 
-    public void onSaveInstanceState(Bundle outState) {
+    void onSaveInstanceState(Bundle outState) {
         mICM.onSaveInstanceState(outState);
     }
 
 
-    public int getSelectedItemPosition() {
+    int getSelectedItemPosition() {
         return mICM.getSelectedItemPosition();
     }
 
 
     @Override
     public int getItemCount() {
-        if ( null == mCursor ) return 0;
-        return mCursor.getCount();
+        if ( null == movieResults) return 0;
+        return movieResults.size();
     }
 
-    public void swapCursor(Cursor newCursor) {
-        mCursor = newCursor;
+    void setMoviesData(List<MovieDiscoverResult> newCursor) {
+        movieResults = newCursor;
         notifyDataSetChanged();
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
-    public Cursor getCursor() {
-        return mCursor;
-    }
-    public void selectView(RecyclerView.ViewHolder viewHolder) {
+    void selectView(RecyclerView.ViewHolder viewHolder) {
         if ( viewHolder instanceof MoviesAdapterViewHolder ) {
             MoviesAdapterViewHolder vfh = (MoviesAdapterViewHolder)viewHolder;
             vfh.onClick(vfh.itemView);

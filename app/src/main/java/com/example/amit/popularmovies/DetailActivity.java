@@ -1,7 +1,8 @@
 package com.example.amit.popularmovies;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -13,7 +14,7 @@ public class DetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
 
             Bundle arguments = new Bundle();
-            arguments.putParcelable(DetailFragment.DETAIL_URI, getIntent().getData());
+            arguments.putString(DetailFragment.MOVIE_DATA, getIntent().getStringExtra(DetailFragment.MOVIE_DATA));
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);

@@ -16,12 +16,8 @@
 package com.example.amit.popularmovies;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
-
-import com.example.amit.popularmovies.sync.MoviesSyncAdapter;
 
 public class Utility {
 
@@ -39,13 +35,4 @@ public class Utility {
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
     }
-
-    @SuppressWarnings("ResourceType")
-    static public @MoviesSyncAdapter.ErrorStatus
-    int getErrorStatus(Context c){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        return sp.getInt(c.getString(R.string.pref_error_status_key), MoviesSyncAdapter.STATUS_UNKNOWN);
-    }
-
-
 }

@@ -4,15 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,34 +14,45 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
-import android.widget.TextView;
 
+import com.example.amit.popularmovies.api.MoviesService;
+import com.example.amit.popularmovies.api.NetworkInstance;
 import com.example.amit.popularmovies.data.MoviesContract;
-import com.example.amit.popularmovies.sync.MoviesSyncAdapter;
+import com.example.amit.popularmovies.model.DiscoverMovieResponse;
+import com.example.amit.popularmovies.model.MovieDiscoverResult;
 import com.github.clans.fab.FloatingActionButton;
 
-public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener,SharedPreferences.OnSharedPreferenceChangeListener{
+import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MoviesFragment extends Fragment implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String LOG_TAG = MoviesFragment.class.getSimpleName();
     private MoviesAdapter mMoviesAdapter;
     private boolean mAutoSelectView;
     private int mChoiceMode;
 
     private RecyclerView mRecyclerView;
-    private FloatingActionButton  mSortbyPopular;
-    private FloatingActionButton  mSortbyRating;
+    private FloatingActionButton mSortbyPopular;
+    private FloatingActionButton mSortbyRating;
     private FloatingActionButton mSortbyFavourite;
 
 
     public static SharedPreferences sp;
-    int item_count=0;
+    int item_count = 0;
 
     private int mPosition = RecyclerView.NO_POSITION;
 
     private static final String SELECTED_KEY = "selected_position";
     // SQL query Pareameters
-    public static String sortOrder=null;
-    public static String whereClause=null;
-    public static String whereArgs=null;
+    public static String sortOrder = null;
+    public static String whereClause = null;
+    public static String whereArgs = null;
 
 
     private static final int MOVIES_LOADER = 0;
@@ -69,9 +72,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     static final int COL_MOVIES_MOVIEID = 3;
 
 
-    public interface Callback {
+    public interface ItemSelectCallback {
 
-        public void onItemSelected(Uri dateUri, String movie_id);
+        public void onItemSelected(MovieDiscoverResult movieDiscoverResult);
     }
 
     public MoviesFragment() {
@@ -100,31 +103,32 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_products);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), (MainActivity.mTwoPane)?3:2));
+        mRecyclerView = rootView.findViewById(R.id.recyclerview_products);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), (MainActivity.mTwoPane) ? 3 : 2));
         View emptyView = rootView.findViewById(R.id.recyclerview_movies_empty);
-        mSortbyPopular = (FloatingActionButton ) rootView.findViewById(R.id.sort_item_popular);
-        mSortbyRating = (FloatingActionButton ) rootView.findViewById(R.id.sort_item_high_rating);
-        mSortbyFavourite = (FloatingActionButton ) rootView.findViewById(R.id.sort_item_favourite);
+        mSortbyPopular = rootView.findViewById(R.id.sort_item_popular);
+        mSortbyRating = rootView.findViewById(R.id.sort_item_high_rating);
+        mSortbyFavourite = rootView.findViewById(R.id.sort_item_favourite);
         mSortbyPopular.setOnClickListener(this);
         mSortbyRating.setOnClickListener(this);
         mSortbyFavourite.setOnClickListener(this);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mMoviesAdapter = new MoviesAdapter(getActivity(), new MoviesAdapter.MoviesAdapterOnClickHandler(){
+        mMoviesAdapter = new MoviesAdapter(getActivity(), new MoviesAdapter.MoviesAdapterOnClickHandler() {
             @Override
-            public void onClick(int id,String movie_id, MoviesAdapter.MoviesAdapterViewHolder vh) {
-                ((Callback) getActivity())
-                        .onItemSelected(MoviesContract.MoviesEntry.buildMoviesDetail(id),movie_id);
+            public void onClick(MovieDiscoverResult movieDiscoverResult, MoviesAdapter.MoviesAdapterViewHolder vh) {
+                ((ItemSelectCallback) getActivity())
+                        .onItemSelected(movieDiscoverResult);
                 mPosition = vh.getAdapterPosition();
-            }}, emptyView, mChoiceMode);
+            }
+        }, emptyView, mChoiceMode);
 
 
         mRecyclerView.setAdapter(mMoviesAdapter);
 
-        sp=this.getActivity().getSharedPreferences("service_validation", Context.MODE_WORLD_READABLE);
-        item_count=sp.getInt("TOTAL_ITEMS", item_count);
+        sp = this.getActivity().getSharedPreferences("service_validation", Context.MODE_PRIVATE);
+        item_count = sp.getInt("TOTAL_ITEMS", item_count);
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(SELECTED_KEY)) {
@@ -133,6 +137,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
             }
             mMoviesAdapter.onRestoreInstanceState(savedInstanceState);
         }
+
+        fetchMoviesData();
+
         return rootView;
     }
 
@@ -147,16 +154,6 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    void RestartLoaderFunc(){
-        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
 
         if (mPosition != RecyclerView.NO_POSITION) {
@@ -166,26 +163,39 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    private void fetchMoviesData() {
+        MoviesService apiService =
+                NetworkInstance.getRetrofitInstance().create(MoviesService.class);
 
-        return new CursorLoader(getActivity(),
-                MoviesContract.MoviesEntry.CONTENT_URI,
-                MOVIES_COLUMNS,
-                whereClause,
-                null,
-                sortOrder);
+        Call<DiscoverMovieResponse> call = apiService.getPopularMovies(getContext().getString(R.string.api_key), "false",
+                "popularity.desc", "1");
+        call.enqueue(new Callback<DiscoverMovieResponse>() {
+            @Override
+            public void onResponse(Call<DiscoverMovieResponse> call, Response<DiscoverMovieResponse> response) {
+                int statusCode = response.code();
+                DiscoverMovieResponse discoverMovieResponse = response.body();
+                if(discoverMovieResponse != null)
+                    updateView(discoverMovieResponse.getResults());
+                else
+                    updateEmptyView();
+            }
+
+            @Override
+            public void onFailure(Call<DiscoverMovieResponse> call, Throwable t) {
+                // Log error here since request failed
+                updateEmptyView();
+            }
+        });
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mMoviesAdapter.swapCursor(data);
+    private void updateView(List<MovieDiscoverResult> results) {
+        mMoviesAdapter.setMoviesData(results);
         if (mPosition != RecyclerView.NO_POSITION) {
 
             mRecyclerView.smoothScrollToPosition(mPosition);
         }
         updateEmptyView();
-        if ( data.getCount() > 0 ) {
+        if (results.size() > 0) {
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
@@ -208,53 +218,42 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mMoviesAdapter.swapCursor(null);
-    }
-
-    @Override
     public void onClick(View v) {
 
-        if(v.getId() == mSortbyFavourite.getId())
-        {
-            whereClause= MoviesContract.MoviesEntry.COLUMN_MOVIE_FAVOURITE+ " =1";
-            sortOrder= null;
-        }
-        else if(v.getId() == mSortbyRating.getId())
-        {
-            sortOrder= MoviesContract.MoviesEntry.COLUMN_MOVIE_USERRATING+ " DESC";
+        if (v.getId() == mSortbyFavourite.getId()) {
+            whereClause = MoviesContract.MoviesEntry.COLUMN_MOVIE_FAVOURITE + " =1";
+            sortOrder = null;
+        } else if (v.getId() == mSortbyRating.getId()) {
+            sortOrder = MoviesContract.MoviesEntry.COLUMN_MOVIE_USERRATING + " DESC";
             whereClause = null;
-        }
-        else if (v.getId() == mSortbyPopular.getId())
-        {
+        } else if (v.getId() == mSortbyPopular.getId()) {
             sortOrder = null;
             whereClause = null;
         }
-        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
     }
 
     private void updateEmptyView() {
-        if ( mMoviesAdapter.getItemCount() == 0 ) {
-            TextView tv = (TextView) getView().findViewById(R.id.recyclerview_movies_empty);
-            if ( null != tv ) {
-                // if cursor is empty, why? do we have an invalid location
-                int message = R.string.empty_forecast_list;
-                @MoviesSyncAdapter.ErrorStatus int location = Utility.getErrorStatus(getActivity());
-                switch (location) {
-                    case MoviesSyncAdapter.STATUS_SERVER_DOWN:
-                        message = R.string.empty_movie_list_server_down;
-                        break;
-                    case MoviesSyncAdapter.STATUS_SERVER_INVALID:
-                        message = R.string.empty_movie_list_server_error;
-                        break;
-                    default:
-                        if (!Utility.isNetworkAvailable(getActivity())) {
-                            message = R.string.empty_movie_list_no_network;
-                        }
-                }
-                tv.setText(message);
-            }
-        }
+//        if (mMoviesAdapter.getItemCount() == 0) {
+//            TextView tv = (TextView) getView().findViewById(R.id.recyclerview_movies_empty);
+//            if (null != tv) {
+//                // if cursor is empty, why? do we have an invalid location
+//                int message = R.string.empty_forecast_list;
+//                @MoviesSyncAdapter.ErrorStatus int location = Utility.getErrorStatus(getActivity());
+//                switch (location) {
+//                    case MoviesSyncAdapter.STATUS_SERVER_DOWN:
+//                        message = R.string.empty_movie_list_server_down;
+//                        break;
+//                    case MoviesSyncAdapter.STATUS_SERVER_INVALID:
+//                        message = R.string.empty_movie_list_server_error;
+//                        break;
+//                    default:
+//                        if (!Utility.isNetworkAvailable(getActivity())) {
+//                            message = R.string.empty_movie_list_no_network;
+//                        }
+//                }
+//                tv.setText(message);
+//            }
+//        }
     }
 
     @Override

@@ -75,7 +75,7 @@ public class FetchReviewTask extends AsyncTask<String, Void, ArrayList<MovieRevi
         try {
             // Construct the URL for the API
             final String MOVIE_BASE_URL =
-                    "http://api.themoviedb.org/3/movie/";
+                    "https://api.themoviedb.org/3/movie/";
 
             final String API_KEY_PARAM = "api_key";
 

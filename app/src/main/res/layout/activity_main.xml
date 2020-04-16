@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:id="@+id/sample_main_layout">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -17,7 +17,7 @@
             android:text="@string/app_main_logo_text"
             android:layout_marginTop="16dp"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"/>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <fragment
         android:layout_width="match_parent"

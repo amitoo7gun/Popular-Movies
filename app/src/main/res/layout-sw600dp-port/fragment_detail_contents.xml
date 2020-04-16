@@ -6,7 +6,7 @@
     tools:showIn="@layout/activity_details_view"
     tools:context="com.example.android.sunshine.app.DetailActivityFragment"> -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content_container"
     android:layout_width="match_parent"
@@ -81,5 +81,5 @@
             android:visibility="visible"/>
 
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>
 

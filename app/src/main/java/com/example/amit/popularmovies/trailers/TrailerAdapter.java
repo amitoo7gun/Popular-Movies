@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.amit.popularmovies.MainActivity;
 import com.example.amit.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
@@ -46,7 +45,7 @@ public class TrailerAdapter extends ArrayAdapter<MovieTrailerModel> {
 
     @Override
     public View getView(int pos, View convertView, ViewGroup parent){
-        String movieId = MainActivity.movieId;
+//        String movieId = MainActivity.movieId;
 
         if(convertView == null){
             viewHolder = new ViewHolder();

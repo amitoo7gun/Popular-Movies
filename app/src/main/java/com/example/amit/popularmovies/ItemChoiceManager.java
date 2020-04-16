@@ -17,9 +17,11 @@ package com.example.amit.popularmovies;
 
 import android.os.Bundle;
 import android.os.Parcel;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.collection.LongSparseArray;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.widget.AbsListView;
