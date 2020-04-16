@@ -17,14 +17,14 @@
     android:orientation="vertical"
     android:id="@+id/detail_main_layout">
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarView"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white" />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/movie_poster"
+        android:id="@+id/mPosterView"
         android:scaleType="fitXY"
         android:contentDescription="@string/movie_poster_description"
         />
@@ -37,28 +37,28 @@
 
 
             <TextView
-                android:id="@+id/detail_movie_name_textview"
+                android:id="@+id/mMovieNameView"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textAppearance="?android:textAppearanceLarge"
                 />
 
             <TextView
-                android:id="@+id/detail_movie_release_date_textview"
+                android:id="@+id/mReleaseDateView"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:layout_below="@+id/detail_movie_name_textview"
+                android:layout_below="@+id/mMovieNameView"
                 />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/rating_backgroung"
                 android:id="@+id/secondary_detail_layout"
-                android:layout_below="@+id/detail_movie_release_date_textview">
+                android:layout_below="@+id/mReleaseDateView">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                     android:contentDescription="@string/movie_rating_description"
                     />
                 <TextView
-                    android:id="@+id/detail_movie_rating_textview"
+                    android:id="@+id/mRatingView"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:textAppearance="?android:textAppearanceMedium"
@@ -86,8 +86,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:layout_toRightOf="@+id/detail_movie_rating_textview"
-                    android:layout_toEndOf="@+id/detail_movie_rating_textview"
+                    android:layout_toRightOf="@+id/mRatingView"
+                    android:layout_toEndOf="@+id/mRatingView"
                     android:layout_marginTop="6dp"
                     android:text="@string/rating_outoff_text"
                     android:textColor="@color/white"
@@ -96,7 +96,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/movie_favourite"
+                    android:id="@+id/mFavouriteView"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:padding="4dp"
@@ -114,7 +114,7 @@
                 android:elevation="@dimen/appbar_elevation"
                 >
             <TextView
-                android:id="@+id/detail_movie_plot_textview"
+                android:id="@+id/mPlotView"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
     <TextView
-        android:id="@+id/detail_movie_id_textview"
+        android:id="@+id/mMovieIdView"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:visibility="gone"

@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity(), ItemSelectCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<View>(R.id.toolbarView) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         mLayout = findViewById(R.id.sample_main_layout)
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), ItemSelectCallback {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemSelected(movieDiscoverResult: MovieDiscoverResult) {
+    override fun onItemSelected(movieDiscoverResult: MovieDiscoverResult?) {
         if (mTwoPane) {
             val args = Bundle()
             args.putParcelable(DetailFragment.MOVIE_DATA, movieDiscoverResult)
@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity(), ItemSelectCallback {
 
     companion object {
         private const val DETAILFRAGMENT_TAG = "DFTAG"
+
         @JvmField
         var mTwoPane = false
     }
