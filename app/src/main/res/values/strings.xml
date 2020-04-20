@@ -3,7 +3,7 @@
 
     <string name="app_name">Popular Movies</string>
     <string name="api_key">a7028c1533e36a2a7e36ea6fd8e46bd6</string>
-    <string name="content_authority">com.example.amit.popularmovies</string>
+    <string name="content_authority">com.amit.popularmovies</string>
     <string name="sync_account_type">popularmovies.example.com</string>
     <string name="action_share">Share</string>
     <array name="sort_menu">
@@ -18,8 +18,8 @@
 
 
     <!-- Empty Movie Database -->
-    <string name="empty_forecast_list">No Movies Information Available</string>
-    <string name="empty_movie_list_no_network">No Movie information available. The network is not available to fetch weather data.</string>
+    <string name="empty_movies_list">No Movies Information Available</string>
+    <string name="empty_movie_list_no_network">No Movie information available. The network is not available to fetch movies info.</string>
     <string name="empty_movie_list_server_down">No Movie information available. The server is not returning data.</string>
     <string name="empty_movie_list_server_error">No Movie information available. The server is not returning valid data. Please check for an updated version of Sunshine.</string>
 
@@ -36,5 +36,6 @@
     <string name="movie_rating_description" translatable="true">This shows rating for movie</string>
     <string name="movie_fav_description" translatable="true">Click on this to if this is your favourite movie</string>
     <string name="movie_trailer_description" translatable="true">Click on this to watch trailer of movie</string>
+    <string name="retry">Retry</string>
 
 </resources>

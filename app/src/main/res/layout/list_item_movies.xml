@@ -1,61 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- Layout for weather forecast list item for future day (not today) -->
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:minHeight="?android:attr/listPreferredItemHeight"-->
-    <!--android:orientation="horizontal">-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="7"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-        <!-->-->
-<androidx.cardview.widget.CardView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.amit.popularmovies.ui.main.MovieViewModel" />
+    </data>
+<androidx.cardview.widget.CardView
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="0dp"
     android:layout_margin="2dp"
-    >
+    card_view:cardCornerRadius="0dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:orientation="vertical">
 
-    <!--<LinearLayout-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_weight="7"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-    <!-->-->
+        <ImageView
+            android:id="@+id/mPosterView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:mutableImageUrl="@{viewModel.posterPath}"
+            app:error="@{@drawable/ic_error_black_48dp}"
+            app:placeholder="@{@drawable/ic_terrain_black_48dp}"
+            android:scaleType="fitXY" />
+
         <TextView
             android:id="@+id/list_item_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="20sp"
             android:text="Movie Name"
-            android:visibility="gone"
-            />
-
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/mPosterView"
-    android:scaleType="fitXY"/>
+            android:textSize="20sp"
+            android:visibility="gone" />
 
     </LinearLayout>
-
-    <!--</LinearLayout>-->
 </androidx.cardview.widget.CardView>
+</layout>

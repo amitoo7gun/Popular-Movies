@@ -64,7 +64,7 @@
 
     <fragment
         android:id="@+id/fragment_movies"
-        android:name="com.example.amit.popularmovies.MoviesFragment"
+        android:name="com.amit.popularmovies.ui.main.MoviesFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_alignEnd="@id/layout_center"

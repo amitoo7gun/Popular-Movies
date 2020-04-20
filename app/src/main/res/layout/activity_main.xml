@@ -22,8 +22,8 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.amit.popularmovies.MoviesFragment"
+        android:name="com.amit.popularmovies.ui.main.MoviesFragment"
         android:id="@+id/fragment_movies"
-        tools:context=".MoviesFragment"
+        tools:context=".ui.main.MoviesFragment"
         tools:layout="@android:layout/list_content" />
 </LinearLayout>

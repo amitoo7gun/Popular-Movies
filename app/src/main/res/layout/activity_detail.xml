@@ -30,7 +30,7 @@
         android:id="@+id/product_detail_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.example.amit.popularmovies.DetailActivity"
+        tools:context="com.amit.popularmovies.ui.detail.DetailActivity"
         tools:ignore="MergeRootFrame" >
 
 </FrameLayout>

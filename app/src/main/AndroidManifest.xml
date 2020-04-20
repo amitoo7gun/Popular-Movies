@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.amit.popularmovies">
+    package="com.amit.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,56 +27,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".ui.detail.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ui.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.amit.popularmovies.MainActivity" />
+                android:value="com.amit.popularmovies.ui.main.MainActivity" />
         </activity>
 
         <meta-data
             android:name="android.app.default_searchable"
-            android:value="com.example.amit.hospitalsnearby.SearchActivity" />
+            android:value="com.amit.hospitalsnearby.SearchActivity" />
 
         <activity
-            android:name=".SearchActivity"
+            android:name=".ui.search.SearchActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".SearchActivity">
+            android:parentActivityName=".ui.search.SearchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.amit.popularmovies.SearchActivity" />
+                android:value="com.amit.popularmovies.ui.search.SearchActivity" />
         </activity>
-
-        <provider
-            android:name=".data.MoviesProvider"
-            android:authorities="@string/content_authority"
-            android:exported="false"
-            android:syncable="true" />
-
-        <!-- SyncAdapter's dummy authentication service -->
-        <service android:name=".sync.MoviesAuthenticatorService">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-        </service>
-
-        <!-- The SyncAdapter service -->
-        <service
-            android:name=".sync.MovieSyncService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
-        </service>
 
     </application>
 

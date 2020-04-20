@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.amit.popularmovies;
+package com.amit.popularmovies
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.Context
+import android.net.ConnectivityManager
 
-public class Utility {
-
+object Utility {
     /**
      * Returns true if the network is available or about to become available.
      *
      * @param c Context used to get the ConnectivityManager
      * @return true if the network is available
      */
-    static public boolean isNetworkAvailable(Context c) {
-        ConnectivityManager cm =
-                (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    fun isNetworkAvailable(c: Context?): Boolean {
+        val cm = c!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = cm.activeNetworkInfo
         return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+                activeNetwork.isConnectedOrConnecting
     }
 }

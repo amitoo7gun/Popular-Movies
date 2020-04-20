@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.amit.popularmovies.DetailActivity" >
+    tools:context="com.amit.popularmovies.ui.detail.DetailActivity" >
 
 </menu>
