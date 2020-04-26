@@ -8,13 +8,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.amit.popularmovies.R
-import com.amit.popularmovies.model.MovieDiscoverResult
-import com.amit.popularmovies.ui.detail.DetailActivity
 import com.amit.popularmovies.ui.detail.DetailFragment
-import com.amit.popularmovies.ui.main.MoviesFragment.ItemSelectCallback
 import com.amit.popularmovies.ui.search.SearchActivity
 
-class MainActivity : AppCompatActivity(), ItemSelectCallback {
+class MainActivity : AppCompatActivity() {
     private val LOG_TAG = MainActivity::class.java.simpleName
     private var mLayout: View? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,21 +52,21 @@ class MainActivity : AppCompatActivity(), ItemSelectCallback {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemSelected(movieDiscoverResult: MovieDiscoverResult?) {
-        if (mTwoPane) {
-            val args = Bundle()
-            args.putParcelable(DetailFragment.MOVIE_DATA, movieDiscoverResult)
-            val fragment = DetailFragment()
-            fragment.arguments = args
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.movies_detail_container, fragment, DETAILFRAGMENT_TAG)
-                    .commit()
-        } else {
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra(DetailFragment.MOVIE_DATA, movieDiscoverResult)
-            startActivity(intent)
-        }
-    }
+//    override fun onItemSelected(movieDiscoverResult: MovieDiscoverResult?) {
+//        if (mTwoPane) {
+//            val args = Bundle()
+//            args.putParcelable(DetailFragment.MOVIE_DATA, movieDiscoverResult)
+//            val fragment = DetailFragment()
+//            fragment.arguments = args
+//            supportFragmentManager.beginTransaction()
+//                    .replace(R.id.movies_detail_container, fragment, DETAILFRAGMENT_TAG)
+//                    .commit()
+//        } else {
+//            val intent = Intent(this, DetailActivity::class.java)
+//            intent.putExtra(DetailFragment.MOVIE_DATA, movieDiscoverResult)
+//            startActivity(intent)
+//        }
+//    }
 
     companion object {
         private const val DETAILFRAGMENT_TAG = "DFTAG"

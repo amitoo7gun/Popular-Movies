@@ -6,6 +6,9 @@
         <variable
             name="viewModel"
             type="com.amit.popularmovies.ui.main.MovieViewModel" />
+        <variable
+            name="callBack"
+            type="com.amit.popularmovies.ui.utils.MoviesNavigator" />
     </data>
 <androidx.cardview.widget.CardView
     android:id="@+id/card"
@@ -15,6 +18,9 @@
     card_view:cardCornerRadius="0dp">
 
     <LinearLayout
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{()->callBack.onMovieItemClick(viewModel.movieResult)}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

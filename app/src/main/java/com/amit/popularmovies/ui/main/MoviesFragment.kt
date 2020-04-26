@@ -1,6 +1,7 @@
 package com.amit.popularmovies.ui.main
 
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
@@ -17,29 +18,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amit.popularmovies.R
 import com.amit.popularmovies.databinding.FragmentMoviesBinding
 import com.amit.popularmovies.model.MovieDiscoverResult
+import com.amit.popularmovies.ui.detail.DetailActivity
+import com.amit.popularmovies.ui.detail.DetailFragment
+import com.amit.popularmovies.ui.utils.MoviesNavigator
 import com.github.clans.fab.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 
-class MoviesFragment : Fragment(), View.OnClickListener, OnSharedPreferenceChangeListener, MoviesAdapter.MoviesAdapterOnClickHandler {
+class MoviesFragment : Fragment(), View.OnClickListener, OnSharedPreferenceChangeListener, MoviesNavigator {
 
     private lateinit var viewModel: DiscoverMoviesViewModel
     private lateinit var binding: FragmentMoviesBinding
     private var errorSnackbar: Snackbar? = null
 
-    private var mMoviesAdapter: MoviesAdapter? = null
     private var mAutoSelectView = false
     private var mChoiceMode = 0
     private var mRecyclerView: RecyclerView? = null
     private var mSortbyPopular: FloatingActionButton? = null
     private var mSortbyRating: FloatingActionButton? = null
     private var mSortbyFavourite: FloatingActionButton? = null
-    var item_count = 0
-    private var mPosition = RecyclerView.NO_POSITION
-
-    interface ItemSelectCallback {
-        fun onItemSelected(movieDiscoverResult: MovieDiscoverResult?)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,20 +47,17 @@ class MoviesFragment : Fragment(), View.OnClickListener, OnSharedPreferenceChang
         inflater.inflate(R.menu.movies_fragment, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         binding = inflate(
                 inflater, R.layout.fragment_movies, container, false)
         val rootView: View = binding.getRoot()
+
         viewModel = ViewModelProviders.of(this).get(DiscoverMoviesViewModel::class.java)
         binding.viewModel = viewModel
-        viewModel.errorMessage.observe(this, Observer {
-            errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
+        viewModel.errorMessage.observe(this, Observer { errorMessage ->
+            if (errorMessage != null) showError(errorMessage) else hideError()
         })
 
 
@@ -77,16 +71,8 @@ class MoviesFragment : Fragment(), View.OnClickListener, OnSharedPreferenceChang
         mSortbyRating?.setOnClickListener(this)
         mSortbyFavourite?.setOnClickListener(this)
         mRecyclerView?.setHasFixedSize(true)
-//        mMoviesAdapter = MoviesAdapter(activity, object : MoviesAdapterOnClickHandler {
-//            override fun onClick(movieDiscoverResult: MovieDiscoverResult?, vh: MoviesAdapter.MoviesAdapterViewHolder) {
-//                (activity as ItemSelectCallback?)
-//                        ?.onItemSelected(movieDiscoverResult)
-//                mPosition = vh.adapterPosition
-//            }
-//        }, emptyView, mChoiceMode)
-//        mRecyclerView?.setAdapter(mMoviesAdapter)
 
-        fetchMoviesData()
+        viewModel.setNavigator(this)
 
         return rootView
     }
@@ -99,52 +85,6 @@ class MoviesFragment : Fragment(), View.OnClickListener, OnSharedPreferenceChang
         mAutoSelectView = a.getBoolean(R.styleable.ForecastFragment_autoSelectView, false)
         a.recycle()
     }
-
-
-    private fun fetchMoviesData() {
-//        val apiService = NetworkInstance.retrofitInstance?.create(MoviesApi::class.java)
-//        val call = apiService?.getPopularMovies(context!!.getString(R.string.api_key), "false",
-//                "popularity.desc", "1")
-//        call?.enqueue(object : Callback<DiscoverMovieResponse?> {
-//            override fun onResponse(call: Call<DiscoverMovieResponse?>, response: Response<DiscoverMovieResponse?>) {
-//                val statusCode = response.code()
-//                val discoverMovieResponse = response.body()
-//                if (discoverMovieResponse != null) updateView(discoverMovieResponse.results) else updateEmptyView()
-//            }
-//
-//            override fun onFailure(call: Call<DiscoverMovieResponse?>, t: Throwable) {
-//                // Log error here since request failed
-//                updateEmptyView()
-//            }
-//        })
-    }
-
-//    private fun updateView(results: List<MovieDiscoverResult>?) {
-//        mMoviesAdapter!!.setMoviesData(results)
-//        if (mPosition != RecyclerView.NO_POSITION) {
-//            mRecyclerView!!.smoothScrollToPosition(mPosition)
-//        }
-//        updateEmptyView()
-//        if (results?.size!! > 0) {
-//            mRecyclerView!!.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-//                override fun onPreDraw(): Boolean {
-//                    // Since we know we're going to get items, we keep the listener around until
-//                    // we see Children.
-//                    if (mRecyclerView!!.childCount > 0) {
-//                        mRecyclerView!!.viewTreeObserver.removeOnPreDrawListener(this)
-//                        var itemPosition = mMoviesAdapter?.selectedItemPosition
-//                        if (RecyclerView.NO_POSITION == itemPosition) itemPosition = 0
-//                        val vh = itemPosition?.let { mRecyclerView!!.findViewHolderForAdapterPosition(it) }
-//                        if (null != vh && mAutoSelectView) {
-//                            mMoviesAdapter!!.selectView(vh)
-//                        }
-//                        return true
-//                    }
-//                    return false
-//                }
-//            })
-//        }
-//    }
 
     override fun onClick(v: View) {
         if (v.id == mSortbyFavourite!!.id) {
@@ -188,17 +128,20 @@ class MoviesFragment : Fragment(), View.OnClickListener, OnSharedPreferenceChang
             updateEmptyView()
         }
     }
-    private fun showError(@StringRes errorMessage:Int){
+
+    private fun showError(@StringRes errorMessage: Int) {
         errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_INDEFINITE)
         errorSnackbar?.setAction(R.string.retry, viewModel.errorClickListener)
         errorSnackbar?.show()
     }
 
-    private fun hideError(){
+    private fun hideError() {
         errorSnackbar?.dismiss()
     }
 
-    override fun onClick(movieDiscoverResult: MovieDiscoverResult?) {
-        TODO("Not yet implemented")
+    override fun onMovieItemClick(movieDiscoverResult: MovieDiscoverResult) {
+        val intent = Intent(activity, DetailActivity::class.java)
+        intent.putExtra(DetailFragment.MOVIE_DATA, movieDiscoverResult)
+        activity?.startActivity(intent)
     }
 }

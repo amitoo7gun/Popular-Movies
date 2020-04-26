@@ -6,6 +6,7 @@ import com.amit.popularmovies.R
 import com.amit.popularmovies.api.MoviesApi
 import com.amit.popularmovies.base.BaseViewModel
 import com.amit.popularmovies.model.MovieDiscoverResult
+import com.amit.popularmovies.ui.utils.MoviesNavigator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -19,7 +20,15 @@ class DiscoverMoviesViewModel : BaseViewModel() {
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage:MutableLiveData<Int> = MutableLiveData()
     val errorClickListener = View.OnClickListener { loadMovies() }
-    val moviesAdapter: MoviesAdapter = MoviesAdapter()
+    lateinit var moviesAdapter: MoviesAdapter
+
+    private lateinit var moviesNavigator: MoviesNavigator
+
+    fun setNavigator(moviesNavigator: MoviesNavigator)
+    {
+        this.moviesNavigator = moviesNavigator;
+        moviesAdapter = MoviesAdapter(moviesNavigator)
+    }
 
     init {
         loadMovies()

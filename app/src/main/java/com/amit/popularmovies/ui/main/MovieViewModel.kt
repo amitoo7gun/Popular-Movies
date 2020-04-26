@@ -7,12 +7,19 @@ import com.amit.popularmovies.model.MovieDiscoverResult
 
 class MovieViewModel : BaseViewModel() {
     private val moviePosterPath = MutableLiveData<String>()
+    private val movieDiscoverResult = MutableLiveData<MovieDiscoverResult>()
 
     fun bind(movie: MovieDiscoverResult){
         moviePosterPath.value = POSTER_BASE_URL + movie.poster_path
+        movieDiscoverResult.value = movie
     }
 
     fun getPosterPath():MutableLiveData<String>{
         return moviePosterPath
+    }
+
+    fun getMovieResult():MutableLiveData<MovieDiscoverResult>
+    {
+        return movieDiscoverResult
     }
 }
